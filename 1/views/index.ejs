@@ -1,0 +1,101 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="sketch.css">
+</head>
+<body>
+	
+	<div id="container"></div>
+
+	<div class="big-container">
+		<div class="slides-container">
+			<% for (var i=0; i<arr.length; i++) { %>
+
+				<img src=<%= arr[i] %> class = 'slides'>
+
+			<% } %>
+		</div>
+	</div>
+
+	<button onclick="myFunction()" id="btn-draw"><div class="button-draw">Draw</div></button>
+	<div class="buttons-container">
+        <div class="left-arrow" onclick="switchSlide(-1)">&#10094;</div>
+        <div class="right-arrow" onclick="switchSlide(1)">&#10095;</div>
+    </div>
+	
+	<script>
+    document.getElementById('container').style.display="none";
+
+    ("sad").addEventListener('click', function(){
+        
+    })
+
+	function myFunction() {
+    	var x = document.getElementById('container');
+        var name= document.getElementsByClassName("button-draw");
+    	if (x.style.display === "none") {
+                        name.value = "send";
+
+        	x.style.display = "block";
+    	} else {
+                        name.value = "draw";
+
+        	x.style.display = "none";
+            document.getElementsByClassName('sketch')[0].getContext('2d').clearRect(0,0,window.innerWidth, window.innerHeight);
+
+    	}
+	}
+	</script>
+	
+	<script type="text/javascript" src="sketch.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+
+	<script>
+        var COLOURS = [ '#E3EB64', '#A7EBCA', '#FFFFFF', '#D8EBA7', '#868E80' ];
+        var radius = 0;
+
+        Sketch.create({
+
+            container: document.getElementById( 'container' ),
+            autoclear: false,
+            retina: 'auto',
+
+            setup: function() {
+                console.log( 'setup' );
+            },
+
+            update: function() {
+                radius = 2 + abs( sin( this.millis * 0.003 ) * 50 );
+            },
+
+            // Event handlers
+
+            keydown: function() {
+                if ( this.keys.C ) this.clear();
+            },
+
+            touchmove: function() {
+
+                for ( var i = this.touches.length - 1, touch; i >= 0; i-- ) {
+
+                    touch = this.touches[i];
+
+                    this.lineCap = 'round';
+                    this.lineJoin = 'round';
+                    this.fillStyle = this.strokeStyle = COLOURS[ i % COLOURS.length ];
+                    this.lineWidth = radius;
+
+                    this.beginPath();
+                    this.moveTo( touch.ox, touch.oy );
+                    this.lineTo( touch.x, touch.y );
+                    this.stroke();
+                }
+            }
+        });
+
+	</script>
+
+</body>
+</html>
