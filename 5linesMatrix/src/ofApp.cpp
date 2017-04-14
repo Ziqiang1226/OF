@@ -21,10 +21,6 @@ void line::setup(){
     
     color.set(ofRandom(255),ofRandom(255),ofRandom(255));
     
-    fbo.allocate(ofGetWindowWidth(),ofGetWindowHeight());
-    fbo.begin();
-    ofClear(255,255,255,0);
-    fbo.end();
 }
 
 
@@ -39,20 +35,14 @@ void line::update(){
     scale= (1-ofNoise(time*0.4))*weight;
 
     
-    moveX= ofSignedNoise(time*a)*ofRandom(1,10);
-    moveY= ofSignedNoise(time*b)*ofRandom(1,10);
-    moveZ= ofSignedNoise(time*c)*ofRandom(1,10);
+    moveX= ofSignedNoise(time*a)*ofRandom(7,10);
+    moveY= ofSignedNoise(time*b)*ofRandom(7,10);
+    moveZ= ofSignedNoise(time*c)*ofRandom(7,10);
     
     loc+= ofPoint(moveX, moveY,moveZ);
 }
 
 void line::draw(){
-    ofBackground(255);
-    
-    fbo.begin();
-    
-    ofSetColor(255,255,255, 10);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
     
     ofPushMatrix();
     ofTranslate(loc.x, loc.y, loc.z);
@@ -64,15 +54,17 @@ void line::draw(){
     ofDrawLine(-40,0,40,0);
     ofPopMatrix();
     
-    fbo.end();
-    
-    ofSetColor(255);
-    fbo.draw(0,0);
+
 }
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     //myline.setup();
+    fbo.allocate(ofGetWindowWidth(),ofGetWindowHeight());
+    fbo.begin();
+    ofClear(255,255,255,0);
+    fbo.end();
+
     for(int i=0; i<5; i++){
         line newline;
         newline.setup();
@@ -102,9 +94,20 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     //myline.draw();
+    ofBackground(255);
+    
+    fbo.begin();
+    
+    ofSetColor(255,255,255, 1);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
     for(int i=0; i<myline.size(); i++){
         myline[i].draw();
     }
+    
+    fbo.end();
+    
+    ofSetColor(255);
+    fbo.draw(0,0);
 }
 
 //--------------------------------------------------------------
