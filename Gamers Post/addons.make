@@ -1,2 +1,0 @@
-ofxJSON-master
-ofxLeapMotion2
